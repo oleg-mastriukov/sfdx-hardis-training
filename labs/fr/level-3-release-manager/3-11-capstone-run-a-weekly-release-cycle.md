@@ -5,7 +5,7 @@ description: "Menez une semaine entière de release manager Salesforce sans pas-
 level: 3
 lab: 11
 lang: fr
-source_rev: "227087b70542c7fdd5f235321968b5154475be67"
+source_rev: "cfe1dcea647583a742b1ae3fdbd4c161e30eb765"
 screenshots:
   - annotated/web/github-star-vscode-sfdx-hardis
   - annotated/vscode/welcome-custom-menu-3
@@ -78,13 +78,13 @@ Vérifiez dans `helios-uat` que les stories sont utilisables, pas seulement dép
 
 Promouvez d'abord `uat` vers `preprod`, et vérifiez que `helios-preprod` se comporte bien. Créez
 ensuite la livraison, la Pull Request de `preprod` vers `main`, intitulée `Release ...`. Lisez la
-ligne de compteurs du commentaire sfdx-hardis et arrêtez-vous si quelque chose est supprimé auquel
+ligne **Metadata** du commentaire sfdx-hardis et arrêtez-vous si quelque chose est supprimé auquel
 vous ne vous attendiez pas. Mergez, regardez, vérifiez, faites les étapes manuelles.
 
 Tout ce que le [Lab 3.7](3-7-hotfix-and-retrofit.md) a posé sur `preprod` est déjà dans `main`, cette livraison ne devrait donc pas
-le redéplacer. Lisez la ligne de compteurs avec cela en tête : ce qui sort cette semaine est le help
+le redéplacer. Lisez la ligne **Metadata** avec cela en tête : ce qui sort cette semaine est le help
 text de Romain, les retrofits qui remontent depuis `integration`, et US-058 et US-060, qui attendent
-dans `uat` depuis le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md). `deleted: 0` reste le nombre sur lequel s'arrêter.
+dans `uat` depuis le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md). Un compteur `deleted` dans cette ligne reste ce sur quoi s'arrêter.
 
 **Cette promotion est aussi ce qui met fin à l'exception.** US-057, US-059 et US-061 sont parties
 seules vers `preprod` la semaine dernière ; celle-ci transporte US-058 et US-060 de manière
@@ -191,8 +191,8 @@ l'issue.
 !!! tip "Si ce cours vous a servi"
     [hardisgroupcom/vscode-sfdx-hardis](https://github.com/hardisgroupcom/vscode-sfdx-hardis) est
     l'extension par laquelle est passé chaque clic de ce cours. Une étoile est ce qui permet à un
-    projet open source de rester visible : ouvrez sa page et cliquez sur **Star** **(1)**, en haut à
-    droite. Donnez une étoile si vous avez aimé ce cours !
+    projet open source de rester visible : ouvrez sa page et cliquez sur **Star** **(1)**, à droite du
+    nom du repository. Donnez une étoile si vous avez aimé ce cours !
 
     ![Le bouton Star du repository vscode-sfdx-hardis sur GitHub](../../_assets/annotated/web/github-star-vscode-sfdx-hardis.png)
 
@@ -217,7 +217,7 @@ fois. Parcourez-la sur le projet où vous travaillez réellement et comptez ce q
 suppriment toutes seules au bout de 30 jours. Les deux orgs Developer Edition qui contiennent une
 entreprise solaire fictive peuvent très bien rester comme terrain d'essai, et `helios-prod` reste un
 Dev Hub d'où créer des scratch orgs. Si vous les gardez, supprimez les secrets
-`SFDX_AUTH_URL_INTEGRATION` et `SFDX_AUTH_URL_UAT` s'ils traînent encore, et souvenez-vous que les
+`SFDX_AUTH_URL_INTEGRATION` et `SFDX_AUTH_URL_UAT`, que le [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md) a laissés en place, et souvenez-vous que les
 certificats JWT de votre fork (votre copie personnelle du repository du cours sur GitHub, par
 exemple `github.com/my-username/sfdx-hardis-training`) sont de vrais identifiants vers de vraies
 orgs.

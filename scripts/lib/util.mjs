@@ -107,6 +107,8 @@ export function run(command, args, options = {}) {
     stdio: options.capture ? "pipe" : "inherit",
     shell: WINDOWS,
     encoding: "utf8",
+    // What the command reads on stdin, for a text too long for a command line
+    ...(options.input !== undefined ? { input: options.input } : {}),
     env: { ...process.env, ...(options.env || {}) }
   });
   return {
@@ -225,6 +227,22 @@ export function git(args, options = {}) {
 
 export function gitOut(args) {
   return run("git", args, { capture: true, quiet: true }).stdout.trim();
+}
+
+/**
+ * Removes a temporary folder a command wrote for one sf call. On Windows the sf
+ * process can still hold a file of it for a moment after it exits, and the
+ * removal then fails with EPERM: it is tried again briefly, and a folder that
+ * stays is left to the system temp cleanup rather than failing the command that
+ * already did its work. The same goes for a temporary file.
+ */
+export function removeTempDir(dir) {
+  try {
+    // rmSync waits synchronously between attempts: keep the budget under a second
+    fs.rmSync(dir, { recursive: true, force: true, maxRetries: 3, retryDelay: 150 });
+  } catch (e) {
+    info(c.dim(`  Left in the temp folder, still in use: ${dir} (${e.code || e.message})`));
+  }
 }
 
 // ------------------------------------------------------------------ prompts
@@ -738,7 +756,7 @@ export function stamp() {
  * commits between" or "head ref not found". The body goes through a file, which
  * is removed whatever happens.
  */
-export function openPullRequest({ slug, base, branch, title, body }) {
+export function openPullRequest({ slug, base, branch, title, body, draft = false }) {
   if (!slug || !hasGh()) {
     return null;
   }
@@ -749,7 +767,7 @@ export function openPullRequest({ slug, base, branch, title, body }) {
     for (let attempt = 1; attempt <= 3 && !url; attempt++) {
       // Captured: the address of the Pull Request is what the learner opens
       // next, and what gh prints goes nowhere they can see in the panel
-      const pr = run("gh", ["pr", "create", "--repo", slug, "--base", base, "--head", branch, "--title", title, "--body-file", bodyFile], {
+      const pr = run("gh", ["pr", "create", "--repo", slug, "--base", base, "--head", branch, "--title", title, "--body-file", bodyFile, ...(draft ? ["--draft"] : [])], {
         capture: true,
         quiet: true
       });

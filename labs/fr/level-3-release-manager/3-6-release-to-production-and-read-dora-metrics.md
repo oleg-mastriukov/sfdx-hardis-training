@@ -5,7 +5,7 @@ description: "Livrez via preprod vers votre org de production, vérifiez-la, pui
 level: 3
 lab: 6
 lang: fr
-source_rev: "044a8eacb552ef9251cdc58fd3e6a95fde210d1f"
+source_rev: "c98da3b813f71676c4d6a1e45058d6e95c01e60d"
 screenshots:
   - annotated/vscode/orgs-manager
   - annotated/vscode/devops-pipeline--settings-menu
@@ -66,8 +66,10 @@ d'`uat` vers `preprod`, dans le diagramme DevOps Pipeline. GitHub s'ouvre sur la
 vers `preprod`.
 
 Son job de contrôle est le premier à se connecter à `helios-preprod`, et il le fait avec la clé et
-les secrets du [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md) : un contrôle vert ici, c'est votre installation JWT de `preprod` qui
-fonctionne.
+les secrets du [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md). C'est la première connexion JWT du cours, alors regardez-la une fois :
+ouvrez le contrôle depuis **Checks**, dépliez **Login & Simulate deployment**, et cherchez
+`sf org login jwt`. Cette ligne, et le job qui continue au-delà, c'est votre clé de `preprod` qui
+fonctionne, même au premier passage, qui s'arrête en rouge plus bas pour une autre raison.
 
 Intitulez-la simplement :
 
@@ -89,7 +91,8 @@ surprendre en production. Une livraison qui échoue ici ne vous a rien coûté.
 ### 3. Créer la Pull Request de production
 
 La pastille **+ PR** sur la flèche de `preprod` vers `main`, de `preprod` dans `main`. Son job de
-contrôle est la première connexion JWT à `helios-prod`. Intitulez-la simplement :
+contrôle est la première connexion JWT à `helios-prod`, avec `sf org login jwt` dans son log comme à
+l'étape 2. Intitulez-la simplement :
 
 > Release 2026-09 to production
 
@@ -102,12 +105,12 @@ case, **Re-run all jobs**, et lisez le contrôle vert qui suit.
 Quand le contrôle se termine, lisez le commentaire sfdx-hardis comme le [Lab 3.2](3-2-review-a-contributor-pull-request.md) l'a enseigné, et
 ajoutez deux questions qui ne valent que pour la production :
 
-| Question                                     | Où regarder                                                                                                                        |
-|----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| **Est-ce que cela supprime quelque chose ?** | Le chiffre `deleted` de la ligne de compteurs. Une suppression en production est définitive et emporte des données avec elle       |
-| **Combien de temps cela va-t-il prendre ?**  | La durée du contrôle est une estimation raisonnable. Si c'est 40 minutes, ce sont 40 minutes pendant lesquelles l'org est modifiée |
+| Question                                     | Où regarder                                                                                                                                                              |
+|----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Est-ce que cela supprime quelque chose ?** | Le chiffre `deleted` de la ligne **Metadata**, affiché seulement quand quelque chose part. Une suppression en production est définitive et emporte des données avec elle |
+| **Combien de temps cela va-t-il prendre ?**  | La durée du contrôle est une estimation raisonnable. Si c'est 40 minutes, ce sont 40 minutes pendant lesquelles l'org est modifiée                                       |
 
-Si ce chiffre n'est pas zéro et que vous ne vous y attendiez pas, **arrêtez-vous**. Le commentaire ne
+Si ce chiffre est là et que vous ne vous y attendiez pas, **arrêtez-vous**. Le commentaire ne
 vous dira pas ce qui part : `manifest/destructiveChanges.xml` et le diff, si. Découvrez de quoi il
 s'agit et qui l'a voulu. Ce n'est pas de la prudence, c'est le métier.
 

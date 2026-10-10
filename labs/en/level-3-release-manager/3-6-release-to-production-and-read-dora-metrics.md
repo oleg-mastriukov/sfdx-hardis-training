@@ -64,7 +64,10 @@ The same way you created the promotion in [Lab 3.5](3-5-promote-to-uat-and-write
 `preprod`.
 
 Its check job is the first one to log into `helios-preprod`, and it does so with the key and the
-secrets of [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md): a green check here is your `preprod` JWT set-up working.
+secrets of [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md). This is the first JWT login of the course, so look at it once: open the check
+from **Checks**, expand **Login & Simulate deployment**, and look for `sf org login jwt`. That line,
+and the job carrying on past it, are your `preprod` key working, even on the first run, which stops
+red further down for another reason.
 
 Title it plainly:
 
@@ -86,7 +89,8 @@ release that fails here has cost you nothing.
 ### 3. Create the production Pull Request
 
 The **+ PR** chip on the arrow from `preprod` to `main`, from `preprod` into `main`. Its check job is
-the first JWT login into `helios-prod`. Title it plainly:
+the first JWT login into `helios-prod`, with `sf org login jwt` in its log as in step 2. Title it
+plainly:
 
 > Release 2026-09 to production
 
@@ -99,12 +103,12 @@ jobs**, and read the green check that follows.
 When the check finishes, read the sfdx-hardis comment the way [Lab 3.2](3-2-review-a-contributor-pull-request.md) taught, and add two questions
 that only apply to production:
 
-| Question                     | Where to look                                                                                                               |
-|------------------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| **Does it delete anything?** | The `deleted` figure in the counts line. A deletion in production is permanent and takes data with it                       |
-| **How long will it take?**   | The check duration is a reasonable estimate. If it is 40 minutes, that is 40 minutes during which the org is being modified |
+| Question                     | Where to look                                                                                                                              |
+|------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| **Does it delete anything?** | The `deleted` figure in the **Metadata** row, shown only when something goes. A deletion in production is permanent and takes data with it |
+| **How long will it take?**   | The check duration is a reasonable estimate. If it is 40 minutes, that is 40 minutes during which the org is being modified                |
 
-If that figure is not zero and you were not expecting it, **stop**. The comment will not tell you
+If that figure is there and you were not expecting it, **stop**. The comment will not tell you
 what is going: `manifest/destructiveChanges.xml` and the diff will. Find out what it is and who
 intended it. That is not being careful, that is the job.
 
