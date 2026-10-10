@@ -491,9 +491,12 @@
       "file": "labs/en/level-2-contributor-advanced/2-6-permission-sets-and-profiles.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-2-contributor-advanced/2-6-permission-sets-and-profiles/",
       "commands": [
+        "hardis:mdapi:read",
         "hardis:work:save"
       ],
-      "flags": [],
+      "flags": [
+        "--active-only"
+      ],
       "config": [
         "autoCleanTypes",
         "minimizeProfiles",
@@ -503,6 +506,7 @@
         "salesforce-devops-work-on-user-story-profiles"
       ],
       "panels": [
+        "metadataRetriever",
         "pipelineConfig",
         "packageXml"
       ],
@@ -568,16 +572,20 @@
       "file": "labs/en/level-2-contributor-advanced/2-8-recover-from-committing-the-wrong-metadata.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-2-contributor-advanced/2-8-recover-from-committing-the-wrong-metadata/",
       "commands": [
+        "hardis:mdapi:read",
         "hardis:work:resetselection",
         "hardis:work:save"
       ],
-      "flags": [],
+      "flags": [
+        "--active-only"
+      ],
       "config": [],
       "docs": [
         "salesforce-devops-publish-user-story",
         "salesforce-devops-manual-repo-clean"
       ],
       "panels": [
+        "metadataRetriever",
         "commandExecution",
         "packageXml"
       ],
@@ -637,7 +645,8 @@
       "file": "labs/en/level-3-release-manager/3-1-configure-the-pipeline-up-to-production.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-3-release-manager/3-1-configure-the-pipeline-up-to-production/",
       "commands": [
-        "hardis:project:configure:auth"
+        "hardis:project:configure:auth",
+        "hardis:work:new"
       ],
       "flags": [],
       "config": [
@@ -669,14 +678,15 @@
         "annotated/web/github-new-branch",
         "annotated/web/github-branch-rules",
         "annotated/web/github-branch-rule",
+        "annotated/vscode/pipeline-cards--new-user-story",
         "annotated/vscode/pipeline-settings-menu--add-org",
         "annotated/vscode/configure-auth-branch--branch-question",
         "annotated/vscode/configure-auth-variables--secrets",
         "annotated/web/github-secrets-actions",
         "annotated/web/github-secret-new",
+        "annotated/web/github-secret-new--key",
         "annotated/vscode/pipeline-config--target-branches",
         "annotated/vscode/pipeline-config-user-stories--target-branches",
-        "annotated/vscode/pipeline-config-deployment--deployment-tab",
         "annotated/vscode/pipeline-config-danger--promotion-branches",
         "annotated/vscode/pipeline-cards--save-publish",
         "annotated/vscode/work-save-completed",
@@ -828,7 +838,8 @@
       ],
       "docs": [
         "salesforce-devops-deploy-major-branches",
-        "hardis/doc/salesforce-devops-release-notes"
+        "hardis/doc/salesforce-devops-release-notes",
+        "salesforce-devops-config-overwrite"
       ],
       "panels": [
         "pipeline",
@@ -912,7 +923,7 @@
       "screenshots": [
         "annotated/salesforce/validation-rule",
         "annotated/vscode/welcome-custom-menu-3",
-        "annotated/web/github-pr-files",
+        "annotated/web/github-pr-files-hotfix",
         "annotated/web/github-pr-merge",
         "annotated/vscode/devops-pipeline-level3--release-to-prod",
         "annotated/web/github-pr-deployed",
@@ -1171,7 +1182,8 @@
       ],
       "salesforce-devops-config-overwrite": [
         "lab-2-7",
-        "lab-3-4"
+        "lab-3-4",
+        "lab-3-5"
       ],
       "salesforce-devops-manual-repo-clean": [
         "lab-2-8"
@@ -1280,7 +1292,9 @@
         "lab-3-1"
       ],
       "metadataRetriever": [
-        "lab-1-5"
+        "lab-1-5",
+        "lab-2-6",
+        "lab-2-8"
       ],
       "packageXml": [
         "lab-1-5",
@@ -1346,6 +1360,7 @@
         "lab-1-7",
         "lab-2-2",
         "lab-2-9",
+        "lab-3-1",
         "lab-3-7",
         "lab-3-10"
       ],
@@ -1383,6 +1398,10 @@
       "hardis:work:refresh": [
         "lab-2-1",
         "lab-2-7"
+      ],
+      "hardis:mdapi:read": [
+        "lab-2-6",
+        "lab-2-8"
       ],
       "hardis:work:resetselection": [
         "lab-2-8"
