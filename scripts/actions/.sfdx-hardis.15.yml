@@ -1,0 +1,9 @@
+commandsPostDeploy:
+  - id: 911d1ba1-b164-49f0-94e1-8c035de9516a
+    label: Brind Handover Items
+    type: data
+    command: ""
+    parameters:
+      sfdmuProject: HeliosHandoverItemRefData
+    runOnlyOnceByOrg: true
+    context: process-deployment-only
