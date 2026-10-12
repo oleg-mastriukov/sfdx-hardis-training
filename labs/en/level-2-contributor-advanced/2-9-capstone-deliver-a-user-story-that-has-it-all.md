@@ -20,7 +20,7 @@ depends_on:
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~30 min
+**Time**: ~1 h 40<!-- observed --> (observed: median 1 h 44, 3 learners, fastest 1 h 16)<!-- /observed -->
 
 **You will**: deliver one story that contains a dependency to check, a data deployment action and a
 teammate working on the same permission set, with no step-by-step.
@@ -73,7 +73,8 @@ handle all three.
    data load of the second trap needs it, as in [Lab 2.4](2-4-ship-reference-data-and-a-batch-with-deployment-actions.md)
 6. **Retrieve it**: **Commit changes**, **Recent Changes**, and take what you made and nothing
    else. Commit it
-7. **Publish, Pull Request, green, merge**
+7. **Publish, Pull Request, green, merge**, in the order the three things below ask for: the
+   teammate comes before your Pull Request, the data action after it
 
 ### The three things waiting for you
 
