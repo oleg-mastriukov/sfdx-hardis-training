@@ -5,7 +5,7 @@ description: "Un déploiement vert n'est pas une fonctionnalité qui marche. Liv
 level: 2
 lab: 4
 lang: fr
-source_rev: "044a8eacb552ef9251cdc58fd3e6a95fde210d1f"
+source_rev: "f35a02fc7be6e5ee84fd8352d9667770467392de"
 screenshots:
   - annotated/vscode/sidebar-commands-custom-menu-2--lab-records
   - annotated/salesforce/crew-capacity-records
@@ -28,7 +28,7 @@ depends_on:
 
 **Niveau** : 2 Contributeur avancé
 
-**Durée** : ~30 min
+**Durée** : ~45 min<!-- observed --> (observé : médiane 45 min, 9 participants, le plus rapide 31 min)<!-- /observed -->
 
 **Vous allez** : rencontrer la pire espèce d'échec, celle où rien n'échoue, et la corriger avec trois
 deployment actions de trois types différents.
@@ -99,8 +99,8 @@ Puis les enregistrements. Helios prend en charge 12 combinaisons, trois types d'
 types de toiture, et chacune a besoin d'un enregistrement Crew Capacity qui dit combien de panneaux
 par jour cette équipe pose sur cette toiture. Saisir douze enregistrements n'apprend rien de ce dont
 parle ce lab, alors le menu Training les crée : **Training: Level 2** **(1)** > **Create my lab
-records** **(2)**, choisissez **Lab 2.4 - the 12 Crew Capacity records**, puis **helios-dev**, et
-répondez **Yes** à **Create them?**.
+records** **(2)**. Le panneau prend de lui-même **Lab 2.4 - the 12 Crew Capacity records** et
+**helios-dev**, le seul lab et la seule org qu'il propose ici : répondez **Yes** à **Create them?**.
 
 ![Le menu Training du Niveau 2, avec Create my lab records](../../_assets/annotated/vscode/sidebar-commands-custom-menu-2--lab-records.png)
 
@@ -261,13 +261,14 @@ org d'envoyer des e-mails tout court est un réglage de Setup qu'aucun déploiem
 batch envoie au planificateur une synthèse quand il a fini, et dans une org où la délivrabilité n'est
 pas sur **All email**, cet e-mail est jeté sans un mot.
 
-| Champ        | Valeur                                  |
-|--------------|-----------------------------------------|
-| Type         | **Manual**                              |
-| Label        | `Set Email Deliverability to All Email` |
-| When         | **Before Metadata Deployment**          |
-| Instructions | les quatre lignes numérotées ci-dessous |
-| Target orgs  | All target orgs                         |
+| Champ              | Valeur                                  |
+|--------------------|-----------------------------------------|
+| Type               | **Manual**                              |
+| Label              | `Set Email Deliverability to All Email` |
+| When               | **Before Metadata Deployment**          |
+| Execution Contexts | Validation and Deployment jobs          |
+| Instructions       | les quatre lignes numérotées ci-dessous |
+| Target orgs        | All target orgs                         |
 
 ```
 1. Open **Setup**, type `Deliverability` in the Quick Find box, and open it.
@@ -290,6 +291,11 @@ org.
 droit d'envoyer des e-mails avant que quoi que ce soit qui en envoie y arrive : la personne qui merge
 fait donc ce clic d'abord, puis merge. Une étape manuelle déclarée avant le déploiement est listée en
 premier dans le commentaire de la Pull Request, c'est là qu'elle la lit.
+
+**Execution Contexts** est sur **Validation and Deployment jobs**, contrairement aux deux autres là
+aussi : le check de la Pull Request doit voir l'étape pour la réclamer avant le merge. Dès que
+**When** indique **Before Metadata Deployment**, une étape manuelle ne propose rien d'autre. Si
+votre fenêtre liste encore trois contextes, votre extension est plus ancienne : choisissez celui-ci.
 
 Une étape manuelle ne fait rien. Elle **apparaît dans le commentaire de la Pull Request et dans le
 rapport de déploiement**, de sorte que la personne qui livre en production est prévenue, dans la
@@ -324,12 +330,17 @@ marquer, et sfdx-hardis publie un commentaire **Deployment Actions** sur la Pull
 
 ![Le commentaire Deployment Actions de la Pull Request US-026](../../_assets/annotated/web/github-pr-deployment-actions.png)
 
-- **Pending manual actions** **(1)** : votre étape de délivrabilité, avec une case à cocher, pour
-  `integration`
-- **Status by org branch** **(2)** : une ligne par action, avec son moment. L'étape de délivrabilité,
-  **pre-deploy**, attend quelqu'un ; l'import et la planification, **post-deploy**, indiquent
+Sous sa bannière, un verdict indique **In integration: 👋 1 to do by hand**, puis :
+
+- **Needs you** **(1)** : votre étape de délivrabilité, avec une case à cocher, marquée 👋 et
+  suivie de *(org branch: integration)*
+- **Status by org** **(2)** : une ligne par action, avec son moment. L'étape de délivrabilité,
+  **pre-deploy**, est **to do by hand** ; l'import et la planification, **post-deploy**, indiquent
   **not run in this org branch yet**, parce que le contrôle s'est arrêté avant eux, et qu'un
   contrôle ne lance ni l'un ni l'autre de toute façon
+
+Le commentaire du contrôle liste aussi l'étape, sous **👋 To do by hand in `integration` before the
+deployment**, avec sa propre case à cocher.
 
 Faites le clic dans `helios-integration` (elle affiche déjà **All email** sur vos scratch orgs, c'est
 donc une vérification de dix secondes), puis cochez la case **(1)**. Dans VS Code, **Mark as done in
@@ -348,9 +359,9 @@ l'étape manuelle est sautée, parce qu'elle est déjà faite dans `integration`
 Une action manuelle déclarée **Before Metadata Deployment** doit être faite avant le merge. Le job de
 validation s'arrête juste après ses actions de pré-déploiement tant que l'une d'elles n'est pas
 marquée comme faite dans la branche d'org cible. Une Pull Request en draft (ou avec `draft` dans son
-titre) n'est pas arrêtée, pour pouvoir continuer à contrôler une story en cours. Les projets qui ne
-veulent pas de ce comportement mettent `failValidationOnPendingManualActions: false` dans
-`config/.sfdx-hardis.yml`.
+titre) n'est pas arrêtée, pour pouvoir continuer à contrôler une story en cours. Par défaut,
+sfdx-hardis ne fait que lister l'étape : le projet Helios active l'arrêt avec
+`failValidationOnPendingManualActions: true` dans `config/.sfdx-hardis.yml`.
 
 </details>
 
@@ -361,7 +372,7 @@ Ne vous contentez pas de la coche verte. **Ouvrez l'org et regardez :**
 - L'onglet **Crew Capacity** de l'application Helios Delivery, sur sa vue de liste **All**, a 12
   enregistrements
 - **Setup > Scheduled Jobs** liste `Helios crew capacity nightly`
-- L'étape manuelle est **done** pour `integration` sous **Status by org branch**, avec la date de
+- L'étape manuelle est **done** pour `integration` sous **Status by org**, avec la date de
   votre case
 
 Vous avez fait le clic avant le merge, ce qu'exige une vraie release : la personne qui merge le fait
@@ -459,6 +470,15 @@ Documentation de la commande : [hardis:org:data:import](https://sfdx-hardis.clou
 - L'étape manuelle listée dans le rapport de déploiement, cochée par vous
 
 ## En cas de problème
+
+**Le fichier d'actions s'appelle `.sfdx-hardis.draft.yml`, ou le check s'arrête sur *Draft deployment actions file found*.**
+Vous avez ajouté l'action alors que le panneau ne connaissait aucune Pull Request pour votre
+branche : la carte **My Pull Request** indiquait *Pull Request not created yet*, et l'action a été
+gardée dans un brouillon. Le pipeline ne lit que `scripts/actions/.sfdx-hardis.` suivi du numéro de
+la Pull Request et de `.yml` : un brouillon, ou un fichier renommé à votre idée, n'est jamais
+exécuté. Une fois votre Pull Request créée, rouvrez le panneau **DevOps Pipeline** et cliquez sur
+**Refresh** : il renomme le brouillon d'après votre Pull Request et vous le dit dans une
+notification. Committez le fichier renommé, puis **Save / Publish**.
 
 **L'onglet Crew Capacity manque dans l'application de `helios-integration`.**
 L'onglet ou l'application `Helios_Delivery` n'était pas dans votre Pull Request, ou l'onglet n'est

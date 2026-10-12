@@ -21,7 +21,7 @@ depends_on:
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~30 min
+**Time**: ~30 min<!-- observed --> (observed: median 30 min, 6 learners, fastest 9 min)<!-- /observed -->
 
 **You will**: get blocked twice by robots, fix both properly rather than around them, and learn to
 run the checks before pushing.
@@ -165,7 +165,8 @@ check **fails**:
 [sfdx-hardis][apextest] Test run code coverage (org wide) 76.92% should be greater than 80%
 ```
 
-The sfdx-hardis comment says it too, in red: **code coverage is insufficient**. Salesforce alone
+The sfdx-hardis comment says it too, in its verdict: **❌ Cannot merge into `integration`: code
+coverage 76.92% is under the 80% target**, and its **Apex tests** row reads the same. Salesforce alone
 would have let it through, at 77% for its 75% floor: the project asks for more, and the check job
 holds it to that.
 

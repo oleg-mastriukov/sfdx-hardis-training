@@ -212,7 +212,8 @@
       "file": "labs/en/level-1-contributor-basics/1-6-pull-request-deployment-check-and-merge.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-1-contributor-basics/1-6-pull-request-deployment-check-and-merge/",
       "commands": [
-        "hardis:project:deploy:smart"
+        "hardis:project:deploy:smart",
+        "hardis:git:artifacts:download"
       ],
       "flags": [
         "--check"
@@ -236,6 +237,10 @@
       "screenshots": [
         "annotated/web/github-pr-checks",
         "annotated/web/github-pr-comment",
+        "annotated/vscode/pipeline-cards-first-pr--my-pull-request",
+        "annotated/vscode/pipeline-pr-window-validation",
+        "annotated/vscode/pipeline-pr-window-running",
+        "annotated/vscode/pipeline-pr-window-files",
         "annotated/web/github-pr-merge",
         "annotated/vscode/devops-pipeline--deployment-status",
         "annotated/web/github-pr-deployed",
@@ -491,9 +496,12 @@
       "file": "labs/en/level-2-contributor-advanced/2-6-permission-sets-and-profiles.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-2-contributor-advanced/2-6-permission-sets-and-profiles/",
       "commands": [
+        "hardis:mdapi:read",
         "hardis:work:save"
       ],
-      "flags": [],
+      "flags": [
+        "--active-only"
+      ],
       "config": [
         "autoCleanTypes",
         "minimizeProfiles",
@@ -503,6 +511,7 @@
         "salesforce-devops-work-on-user-story-profiles"
       ],
       "panels": [
+        "metadataRetriever",
         "pipelineConfig",
         "packageXml"
       ],
@@ -568,16 +577,20 @@
       "file": "labs/en/level-2-contributor-advanced/2-8-recover-from-committing-the-wrong-metadata.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-2-contributor-advanced/2-8-recover-from-committing-the-wrong-metadata/",
       "commands": [
+        "hardis:mdapi:read",
         "hardis:work:resetselection",
         "hardis:work:save"
       ],
-      "flags": [],
+      "flags": [
+        "--active-only"
+      ],
       "config": [],
       "docs": [
         "salesforce-devops-publish-user-story",
         "salesforce-devops-manual-repo-clean"
       ],
       "panels": [
+        "metadataRetriever",
         "commandExecution",
         "packageXml"
       ],
@@ -637,7 +650,8 @@
       "file": "labs/en/level-3-release-manager/3-1-configure-the-pipeline-up-to-production.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-3-release-manager/3-1-configure-the-pipeline-up-to-production/",
       "commands": [
-        "hardis:project:configure:auth"
+        "hardis:project:configure:auth",
+        "hardis:work:new"
       ],
       "flags": [],
       "config": [
@@ -669,15 +683,17 @@
         "annotated/web/github-new-branch",
         "annotated/web/github-branch-rules",
         "annotated/web/github-branch-rule",
+        "annotated/vscode/pipeline-cards--new-user-story",
         "annotated/vscode/pipeline-settings-menu--add-org",
         "annotated/vscode/configure-auth-branch--branch-question",
         "annotated/vscode/configure-auth-variables--secrets",
         "annotated/web/github-secrets-actions",
         "annotated/web/github-secret-new",
+        "annotated/web/github-secret-new--key",
         "annotated/vscode/pipeline-config--target-branches",
         "annotated/vscode/pipeline-config-user-stories--target-branches",
-        "annotated/vscode/pipeline-config-deployment--deployment-tab",
         "annotated/vscode/pipeline-config-danger--promotion-branches",
+        "annotated/vscode/pipeline-config-branch-merge-target",
         "annotated/vscode/pipeline-cards--save-publish",
         "annotated/vscode/work-save-completed",
         "annotated/vscode/devops-pipeline-level3--four-stages"
@@ -697,7 +713,8 @@
       "file": "labs/en/level-3-release-manager/3-2-review-a-contributor-pull-request.md",
       "url": "https://sfdx-hardis-training.github.io/en/level-3-release-manager/3-2-review-a-contributor-pull-request/",
       "commands": [
-        "hardis:project:deploy:smart"
+        "hardis:project:deploy:smart",
+        "hardis:git:artifacts:download"
       ],
       "flags": [
         "--check"
@@ -712,6 +729,8 @@
       ],
       "screenshots": [
         "annotated/web/github-pr-files",
+        "annotated/vscode/pipeline-review-pr",
+        "annotated/vscode/pipeline-pr-window-review-files",
         "annotated/vscode/welcome-custom-menu-3"
       ],
       "translations": {
@@ -784,7 +803,6 @@
       "flags": [],
       "config": [
         "autoCleanTypes",
-        "packageNoOverwritePath",
         "useDeltaDeployment"
       ],
       "docs": [
@@ -823,12 +841,12 @@
       "config": [
         "mergeTargets",
         "availableTargetBranches",
-        "packageNoOverwritePath",
         "failValidationOnPendingManualActions"
       ],
       "docs": [
         "salesforce-devops-deploy-major-branches",
-        "hardis/doc/salesforce-devops-release-notes"
+        "hardis/doc/salesforce-devops-release-notes",
+        "salesforce-devops-config-overwrite"
       ],
       "panels": [
         "pipeline",
@@ -861,7 +879,12 @@
         "hardis:doc:dora-report",
         "hardis:project:deploy:smart"
       ],
-      "flags": [],
+      "flags": [
+        "--data-only",
+        "--compare",
+        "--period",
+        "--refresh"
+      ],
       "config": [
         "productionBranch",
         "mergeTargets"
@@ -871,11 +894,16 @@
         "hardis/doc/salesforce-devops-dora-report"
       ],
       "panels": [
-        "pipeline"
+        "pipeline",
+        "doraMetrics",
+        "commandExecution"
       ],
       "screenshots": [
         "annotated/vscode/orgs-manager",
-        "annotated/vscode/devops-pipeline--settings-menu"
+        "annotated/vscode/pipeline-settings-menu-level3--dora",
+        "annotated/vscode/dora-metrics",
+        "annotated/vscode/dora-metrics-production",
+        "annotated/vscode/dora-metrics-export-menu"
       ],
       "translations": {
         "fr": {
@@ -912,7 +940,7 @@
       "screenshots": [
         "annotated/salesforce/validation-rule",
         "annotated/vscode/welcome-custom-menu-3",
-        "annotated/web/github-pr-files",
+        "annotated/web/github-pr-files-hotfix",
         "annotated/web/github-pr-merge",
         "annotated/vscode/devops-pipeline-level3--release-to-prod",
         "annotated/web/github-pr-deployed",
@@ -952,7 +980,8 @@
       "docs": [
         "salesforce-monitoring-home",
         "salesforce-monitoring-config-github",
-        "salesforce-monitoring-grafana-v2"
+        "salesforce-monitoring-grafana-v2",
+        "salesforce-devops-setup-integration-email"
       ],
       "panels": [
         "monitoringConfig",
@@ -1078,7 +1107,8 @@
         "salesforce-devops-setup-checklist"
       ],
       "panels": [
-        "pipeline"
+        "pipeline",
+        "doraMetrics"
       ],
       "screenshots": [
         "annotated/web/github-star-vscode-sfdx-hardis",
@@ -1171,7 +1201,8 @@
       ],
       "salesforce-devops-config-overwrite": [
         "lab-2-7",
-        "lab-3-4"
+        "lab-3-4",
+        "lab-3-5"
       ],
       "salesforce-devops-manual-repo-clean": [
         "lab-2-8"
@@ -1219,6 +1250,9 @@
         "lab-3-8"
       ],
       "salesforce-monitoring-grafana-v2": [
+        "lab-3-8"
+      ],
+      "salesforce-devops-setup-integration-email": [
         "lab-3-8"
       ],
       "salesforce-project-doc-generate": [
@@ -1280,7 +1314,9 @@
         "lab-3-1"
       ],
       "metadataRetriever": [
-        "lab-1-5"
+        "lab-1-5",
+        "lab-2-6",
+        "lab-2-8"
       ],
       "packageXml": [
         "lab-1-5",
@@ -1294,6 +1330,7 @@
         "lab-2-7",
         "lab-2-8",
         "lab-3-1",
+        "lab-3-6",
         "lab-3-10"
       ],
       "backpromote": [
@@ -1318,6 +1355,10 @@
         "lab-3-1",
         "lab-3-4",
         "lab-3-10"
+      ],
+      "doraMetrics": [
+        "lab-3-6",
+        "lab-3-11"
       ],
       "monitoringConfig": [
         "lab-3-8"
@@ -1346,6 +1387,7 @@
         "lab-1-7",
         "lab-2-2",
         "lab-2-9",
+        "lab-3-1",
         "lab-3-7",
         "lab-3-10"
       ],
@@ -1377,12 +1419,20 @@
         "lab-3-10",
         "lab-3-11"
       ],
+      "hardis:git:artifacts:download": [
+        "lab-1-6",
+        "lab-3-2"
+      ],
       "hardis:work:backpromote": [
         "lab-2-1"
       ],
       "hardis:work:refresh": [
         "lab-2-1",
         "lab-2-7"
+      ],
+      "hardis:mdapi:read": [
+        "lab-2-6",
+        "lab-2-8"
       ],
       "hardis:work:resetselection": [
         "lab-2-8"
@@ -1543,10 +1593,6 @@
       ],
       "movedFrom": [
         "lab-3-3"
-      ],
-      "packageNoOverwritePath": [
-        "lab-3-4",
-        "lab-3-5"
       ],
       "monitoringRepository": [
         "lab-3-8"
