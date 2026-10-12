@@ -9,13 +9,17 @@ source_rev: ""
 screenshots:
   - annotated/web/github-pr-checks
   - annotated/web/github-pr-comment
+  - annotated/vscode/pipeline-cards-first-pr--my-pull-request
+  - annotated/vscode/pipeline-pr-window-validation
+  - annotated/vscode/pipeline-pr-window-running
+  - annotated/vscode/pipeline-pr-window-files
   - annotated/web/github-pr-merge
   - annotated/vscode/devops-pipeline--deployment-status
   - annotated/web/github-pr-deployed
   - annotated/vscode/work-save-completed
   - annotated/web/github-pr-merge-squash
 depends_on:
-  commands: [hardis:project:deploy:smart]
+  commands: [hardis:project:deploy:smart, hardis:git:artifacts:download]
   flags: [--check]
   config: [testLevel, apexTestsMinCoverageOrgWide, genericTicketingProviderRegex, genericTicketingProviderUrlBuilder, genericTicketingProviderDetailsUrlBuilder]
   panels: [pipeline]
@@ -26,7 +30,7 @@ depends_on:
 
 **Level**: 1 Contributor basics
 
-**Time**: ~20 min
+**Time**: ~25 min<!-- observed --> (observed: median 28 min, 8 learners, fastest 12 min)<!-- /observed -->
 
 **You will**: have a robot check your work before a human does, read what it says, and put US-014
 into the shared integration org.
@@ -176,6 +180,75 @@ ServiceNow connector instead.
     Salesforce stores slightly differently in your org can move from unchanged to updated, and that
     is not a problem: what matters is that your field is the one created.
 
+**The same comment, without leaving VS Code.** Go back to VS Code and open the **DevOps Pipeline**
+panel. Under **Project Contribution Workflow**, the **My Pull Request** card **(1)** now names your
+Pull Request. Click it.
+
+If the card still reads *Pull Request not created yet*, the panel is showing what it knew before you
+created it: click **Refresh** in its top bar, and the card catches up. It also does so by itself
+within a minute.
+
+![The My Pull Request card of the DevOps Pipeline panel, naming the Pull Request of US-014](../../_assets/annotated/vscode/pipeline-cards-first-pr--my-pull-request.png)
+
+A window opens on your Pull Request, and it gathers what GitHub spreads over several pages:
+
+1. **The tabs** **(1)**: **Validation** is the deployment check, **Code Quality** is Mega-Linter,
+   and **Deployment** fills in once you have merged. **Tickets** holds the story found in your
+   branch name
+2. **The job** **(2)**: its result, how long it ran, **Open job** for its log on GitHub,
+   **Open comment** for the comment on GitHub, and **Files**
+3. **The comment** **(3)**, the one you have just read, word for word
+
+![The window of a Pull Request in VS Code, on its Validation tab](../../_assets/annotated/vscode/pipeline-pr-window-validation.png)
+
+Your number is not `#46`, and your comment opens with the banner you saw on GitHub.
+
+**Opened it while a check was still running?** Then the window says so, and you do not need
+GitHub to know where the check stands:
+
+1. **The tab** **(1)** carries a spinner for as long as its job runs, **Code Quality** included,
+   and the **Validation** step above the tabs moves
+2. **The running job** **(2)** comes first: when it started, for how long it has been going on,
+   counted every second, and **Open job** for its log on GitHub
+3. **Under it** **(3)**, what the previous run left. On a first Pull Request there is nothing
+   there yet: the comment arrives when the job ends
+
+![The window of a Pull Request in VS Code while its deployment check is running](../../_assets/annotated/vscode/pipeline-pr-window-running.png)
+
+Nothing to click: the window asks GitHub again every twenty seconds. When the job ends, its row
+leaves and the comment takes its place, with the time the job took.
+
+Now click **Files** **(1)**. The check kept its reports, and sfdx-hardis lists them under the job
+**(2)**. Click one to open it in VS Code: `deployment-components.csv` is the list behind
+**7 components would change**, one row per component.
+
+![The Files button of the validation job, opened on the reports the job kept](../../_assets/annotated/vscode/pipeline-pr-window-files.png)
+
+You will not need these files today. They are there for the day a check goes red and the comment is
+not enough, and they save you a trip to GitHub.
+
+<details markdown="1"><summary>Under the hood: where the files come from</summary>
+
+The check job publishes its `hardis-report` folder on GitHub, as an artifact named
+**sfdx-hardis reports**. **Files** runs `sf hardis:git:artifacts:download` with the address of the
+job: it asks GitHub for the artifacts of that run, downloads them and unzips them into
+`hardis-report/job-artifacts/` of your project. Git ignores that folder, so the copies never end up
+in a commit. Click **Files** again later and nothing is downloaded twice, unless the job ran again.
+
+GitHub does not keep artifacts forever. Once they are gone, the files you already downloaded stay,
+and a job you never opened says its files have expired.
+
+<!-- command-links:start -->
+Command documentation: [hardis:git:artifacts:download](https://sfdx-hardis.cloudity.com/hardis/git/artifacts/download/)
+<!-- command-links:end -->
+
+</details>
+
+!!! note "No Files button?"
+    It needs a recent sfdx-hardis. Open the **Setup** panel of [Lab 1.1](1-1-install-vs-code-and-sfdx-hardis.md):
+    when the `sfdx-hardis` card reads **Upgrade**, click it, then reopen the window. **Open job**
+    leads to the same files in the meantime: the **Summary** of the run, then **Artifacts**.
+
 ### 4. Merge
 
 Both checks green, the comment says **Ready to merge**. Back on the **Conversation** tab, scroll to the bottom:
@@ -222,6 +295,14 @@ more thing in everyone's list for no benefit.
     the job is a choice the project makes in `.mega-linter.yml`, and a job that fails blocks the
     merge, like the deployment check. [Lab 2.5](../level-2-contributor-advanced/2-5-pass-code-quality-and-apex-test-coverage.md) has you meet one finding that only warns, and
     one check that blocks.
+
+!!! warning "The yellow banner that follows"
+    Once `integration` has moved, the home page of your fork may show a yellow banner: **integration
+    had recent pushes**, with a **Compare & pull request** button. Leave it alone. It offers to send
+    `integration` to the **original** repository, the one every learner forked, and that is never
+    what you want. If you opened one by mistake, **Close pull request** at the bottom of its page
+    undoes it, and nothing of yours is lost: your `integration` branch lives in your fork and stays
+    there.
 
 ### 5. Watch the real deployment
 
@@ -306,6 +387,21 @@ Command documentation: [hardis:project:deploy:smart](https://sfdx-hardis.cloudit
 That is one full delivery loop. Every story for the rest of your life on this project is this loop.
 
 ## If it goes wrong
+
+**The My Pull Request card still says *Pull Request not created yet*.**
+Three causes, in the order they happen:
+
+- the panel has not looked since you created the Pull Request. Click **Refresh** in the top bar of
+  the **DevOps Pipeline** panel
+- VS Code is on another branch. The card is about the branch you are on: check the bottom left of
+  the status bar, and if it does not read `features/US-014-panels-required`, click it and pick that
+  branch
+- the Pull Request was opened on the original repository instead of your fork. Its address then
+  starts with `github.com/hardisgroupcom/`, and the card only looks in your fork. Close it there,
+  and open it again as step 1 says, with **base** in your own fork
+
+None of them stops the lab: the checks, the comment and the merge of steps 2 to 4 all happen on
+GitHub, and that is where the lab is checked.
 
 **The checks never start.**
 Actions are still disabled on your fork (`github.com/my-username/sfdx-hardis-training`). GitHub hides

@@ -20,7 +20,7 @@ depends_on:
 
 **Niveau** : 2 Contributeur avancé
 
-**Durée** : ~30 min
+**Durée** : ~1 h 40<!-- observed --> (observé : médiane 1 h 44, 3 participants, le plus rapide 1 h 16)<!-- /observed -->
 
 **Vous allez** : livrer une story qui contient une dépendance à vérifier, une deployment action de
 données et un collègue qui travaille sur le même permission set, sans pas-à-pas.
@@ -74,7 +74,8 @@ savez déjà traiter les trois.
    ce permission set, et le chargement de données du deuxième piège en a besoin, comme au [Lab 2.4](2-4-ship-reference-data-and-a-batch-with-deployment-actions.md)
 6. **Faites un retrieve** : **Commit changes**, **Recent Changes**, et prenez ce que vous avez fait
    et rien d'autre. Commitez
-7. **Publiez, Pull Request, vert, merge**
+7. **Publiez, Pull Request, vert, merge**, dans l'ordre que demandent les trois points
+   ci-dessous : le coéquipier passe avant votre Pull Request, l'action de données après
 
 ### Les trois choses qui vous attendent
 

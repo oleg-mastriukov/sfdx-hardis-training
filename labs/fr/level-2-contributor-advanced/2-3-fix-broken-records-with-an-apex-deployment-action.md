@@ -24,7 +24,7 @@ depends_on:
 
 **Niveau** : 2 Contributeur avancé
 
-**Durée** : ~30 min
+**Durée** : ~45 min<!-- observed --> (observé : médiane 48 min, 12 participants, le plus rapide 16 min)<!-- /observed -->
 
 **Vous allez** : rencontrer un échec qu'aucune correction de métadonnée ne résout, et découvrir
 l'outil qui existe pour cela : une deployment action.
@@ -313,6 +313,15 @@ Documentation de la commande : [hardis:project:deploy:smart](https://sfdx-hardis
 - Aucune étape manuelle effectuée par qui que ce soit dans quelque org que ce soit
 
 ## En cas de problème
+
+**Le fichier d'actions s'appelle `.sfdx-hardis.draft.yml`, ou le check s'arrête sur *Draft deployment actions file found*.**
+Vous avez ajouté l'action alors que le panneau ne connaissait aucune Pull Request pour votre
+branche : la carte **My Pull Request** indiquait *Pull Request not created yet*, et l'action a été
+gardée dans un brouillon. Le pipeline ne lit que `scripts/actions/.sfdx-hardis.` suivi du numéro de
+la Pull Request et de `.yml` : un brouillon, ou un fichier renommé à votre idée, n'est jamais
+exécuté. Une fois votre Pull Request créée, rouvrez le panneau **DevOps Pipeline** et cliquez sur
+**Refresh** : il renomme le brouillon d'après votre Pull Request et vous le dit dans une
+notification. Committez le fichier renommé, puis **Save / Publish**.
 
 **L'action n'apparaît pas dans l'onglet Deployment Actions.**
 Le panneau lit la Pull Request depuis votre fork (votre copie personnelle du repository du cours sur

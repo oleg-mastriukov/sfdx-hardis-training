@@ -5,17 +5,21 @@ description: "Ouvrez une Pull Request GitHub, lisez le contrôle de déploiement
 level: 1
 lab: 6
 lang: fr
-source_rev: "ee3029d22ba45d5b0cbdb2c50c30d3e3aa93a291"
+source_rev: "9ef428b3794f458225aedfbd5d985bd4894c9c97"
 screenshots:
   - annotated/web/github-pr-checks
   - annotated/web/github-pr-comment
+  - annotated/vscode/pipeline-cards-first-pr--my-pull-request
+  - annotated/vscode/pipeline-pr-window-validation
+  - annotated/vscode/pipeline-pr-window-running
+  - annotated/vscode/pipeline-pr-window-files
   - annotated/web/github-pr-merge
   - annotated/vscode/devops-pipeline--deployment-status
   - annotated/web/github-pr-deployed
   - annotated/vscode/work-save-completed
   - annotated/web/github-pr-merge-squash
 depends_on:
-  commands: [hardis:project:deploy:smart]
+  commands: [hardis:project:deploy:smart, hardis:git:artifacts:download]
   flags: [--check]
   config: [testLevel, apexTestsMinCoverageOrgWide, genericTicketingProviderRegex, genericTicketingProviderUrlBuilder, genericTicketingProviderDetailsUrlBuilder]
   panels: [pipeline]
@@ -26,7 +30,7 @@ depends_on:
 
 **Niveau** : 1 Contributeur, les bases
 
-**Durée** : ~20 min
+**Durée** : ~25 min<!-- observed --> (observé : médiane 28 min, 8 participants, le plus rapide 12 min)<!-- /observed -->
 
 **Vous allez** : faire contrôler votre travail par un robot avant qu'un humain le fasse, lire ce
 qu'il dit, et mettre US-014 dans l'org d'intégration partagée.
@@ -186,6 +190,77 @@ Azure Boards ou ServiceNow à la place.
     Salesforce range légèrement différemment dans votre org peut passer de inchangé à mis à jour, et
     ce n'est pas un problème : ce qui compte, c'est que votre champ soit celui qui est créé.
 
+**Le même commentaire, sans quitter VS Code.** Revenez dans VS Code et ouvrez le panneau **DevOps
+Pipeline**. Sous **Project Contribution Workflow**, la carte **My Pull Request** **(1)** porte
+maintenant le nom de votre Pull Request. Cliquez dessus.
+
+Si la carte affiche encore *Pull Request not created yet*, le panneau montre ce qu'il savait avant
+que vous la créiez : cliquez sur **Refresh** dans sa barre du haut, et la carte se met à jour. Elle
+le fait aussi toute seule en moins d'une minute.
+
+![La carte My Pull Request du panneau DevOps Pipeline, qui nomme la Pull Request de US-014](../../_assets/annotated/vscode/pipeline-cards-first-pr--my-pull-request.png)
+
+Une fenêtre s'ouvre sur votre Pull Request, et elle rassemble ce que GitHub répartit sur plusieurs
+pages :
+
+1. **Les onglets** **(1)** : **Validation** est le contrôle de déploiement, **Code Quality** est
+   Mega-Linter, et **Deployment** se remplit une fois le merge fait. **Tickets** contient la story
+   trouvée dans le nom de votre branche
+2. **Le job** **(2)** : son résultat, sa durée, **Open job** pour son log sur GitHub,
+   **Open comment** pour le commentaire sur GitHub, et **Files**
+3. **Le commentaire** **(3)**, celui que vous venez de lire, mot pour mot
+
+![La fenêtre d'une Pull Request dans VS Code, sur son onglet Validation](../../_assets/annotated/vscode/pipeline-pr-window-validation.png)
+
+Votre numéro n'est pas `#46`, et votre commentaire commence par la bannière vue sur GitHub.
+
+**Vous l'avez ouverte pendant qu'un contrôle tournait encore ?** La fenêtre le dit, et vous n'avez
+pas besoin de GitHub pour savoir où en est le contrôle :
+
+1. **L'onglet** **(1)** porte un spinner tant que son job tourne, **Code Quality** compris, et
+   l'étape **Validation** au-dessus des onglets bouge
+2. **Le job en cours** **(2)** vient en premier : quand il a démarré, depuis combien de temps il
+   tourne, compté chaque seconde, et **Open job** pour son log sur GitHub
+3. **En dessous** **(3)**, ce que l'exécution précédente a laissé. Sur une première Pull Request
+   il n'y a encore rien : le commentaire arrive quand le job se termine
+
+![La fenêtre d'une Pull Request dans VS Code pendant que son contrôle de déploiement tourne](../../_assets/annotated/vscode/pipeline-pr-window-running.png)
+
+Rien à cliquer : la fenêtre interroge GitHub toutes les vingt secondes. Quand le job se termine,
+sa ligne disparaît et le commentaire prend sa place, avec la durée du job.
+
+Cliquez maintenant sur **Files** **(1)**. Le contrôle a gardé ses rapports, et sfdx-hardis les liste
+sous le job **(2)**. Cliquez sur l'un d'eux pour l'ouvrir dans VS Code : `deployment-components.csv`
+est la liste derrière **7 components would change**, une ligne par composant.
+
+![Le bouton Files du job de validation, ouvert sur les rapports que le job a gardés](../../_assets/annotated/vscode/pipeline-pr-window-files.png)
+
+Vous n'aurez pas besoin de ces fichiers aujourd'hui. Ils sont là pour le jour où un contrôle passe
+au rouge et où le commentaire ne suffit pas, et ils vous évitent un détour par GitHub.
+
+<details markdown="1"><summary>Sous le capot : d'où viennent les fichiers</summary>
+
+Le job de contrôle publie son dossier `hardis-report` sur GitHub, sous la forme d'un artifact nommé
+**sfdx-hardis reports**. **Files** lance `sf hardis:git:artifacts:download` avec l'adresse du job :
+la commande demande à GitHub les artifacts de cette exécution, les télécharge et les décompresse
+dans `hardis-report/job-artifacts/` de votre projet. Git ignore ce dossier, donc les copies ne
+finissent jamais dans un commit. Recliquez sur **Files** plus tard et rien n'est téléchargé deux
+fois, sauf si le job a tourné de nouveau.
+
+GitHub ne garde pas les artifacts indéfiniment. Une fois disparus, les fichiers déjà téléchargés
+restent, et un job que vous n'avez jamais ouvert indique que ses fichiers ont expiré.
+
+<!-- command-links:start -->
+Documentation de la commande : [hardis:git:artifacts:download](https://sfdx-hardis.cloudity.com/hardis/git/artifacts/download/)
+<!-- command-links:end -->
+
+</details>
+
+!!! note "Pas de bouton Files ?"
+    Il demande un sfdx-hardis récent. Ouvrez le panneau **Setup** du [Lab 1.1](1-1-install-vs-code-and-sfdx-hardis.md) :
+    quand la carte `sfdx-hardis` affiche **Upgrade**, cliquez dessus, puis rouvrez la fenêtre. **Open job**
+    mène aux mêmes fichiers en attendant : le **Summary** de l'exécution, puis **Artifacts**.
+
 ### 4. Merger
 
 Les deux contrôles verts, le commentaire dit **Ready to merge**. De retour sur l'onglet **Conversation**, faites
@@ -235,6 +310,14 @@ une chose de plus dans la liste de tout le monde, sans aucun bénéfice.
     et un job qui échoue bloque le merge, comme le contrôle de déploiement. Le
     [Lab 2.5](../level-2-contributor-advanced/2-5-pass-code-quality-and-apex-test-coverage.md) vous fait rencontrer une trouvaille qui ne fait qu'avertir, et un contrôle
     qui bloque.
+
+!!! warning "Le bandeau jaune qui suit"
+    Une fois qu'`integration` a bougé, la page d'accueil de votre fork peut afficher un bandeau
+    jaune : **integration had recent pushes**, avec un bouton **Compare & pull request**. N'y touchez
+    pas. Il propose d'envoyer `integration` vers le repository **d'origine**, celui que tous les
+    participants ont forké, et ce n'est jamais ce que vous voulez. Si vous en avez ouvert une par
+    erreur, **Close pull request** en bas de sa page l'annule, et rien de ce qui est à vous n'est
+    perdu : votre branche `integration` vit dans votre fork et y reste.
 
 ### 5. Regarder le vrai déploiement
 
@@ -323,6 +406,21 @@ C'est une boucle de livraison complète. Chaque story, pendant tout le temps que
 projet, sera cette boucle.
 
 ## En cas de problème
+
+**La carte My Pull Request affiche encore *Pull Request not created yet*.**
+Trois causes, dans l'ordre où elles arrivent :
+
+- le panneau n'a pas regardé depuis que vous avez créé la Pull Request. Cliquez sur **Refresh** dans
+  la barre du haut du panneau **DevOps Pipeline**
+- VS Code est sur une autre branche. La carte parle de la branche sur laquelle vous êtes : regardez
+  en bas à gauche de la barre d'état, et si elle n'indique pas `features/US-014-panels-required`,
+  cliquez dessus et choisissez cette branche
+- la Pull Request a été ouverte sur le repository d'origine au lieu de votre fork. Son adresse
+  commence alors par `github.com/hardisgroupcom/`, et la carte ne regarde que dans votre fork.
+  Fermez-la là-bas, et rouvrez-la comme le dit l'étape 1, avec **base** dans votre propre fork
+
+Aucune n'arrête le lab : les contrôles, le commentaire et le merge des étapes 2 à 4 se passent tous
+sur GitHub, et c'est là que le lab est vérifié.
 
 **Les contrôles ne démarrent jamais.**
 Actions est encore désactivé sur votre fork (`github.com/my-username/sfdx-hardis-training`). GitHub
