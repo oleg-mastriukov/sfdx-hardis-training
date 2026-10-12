@@ -257,7 +257,7 @@ devHubAlias: ""
 devHubInstanceUrl: https://login.salesforce.com
 devHubUsername: ""
 enableDeltaDeploymentBetweenMajorBranches: false
-enablePromotionBranches: false
+enablePromotionBranches: true
 enableDeploymentApexTestClasses: false
 enableDeprecatedDeploymentPlan: false
 installPackagesDuringCheckDeploy: false
@@ -270,3 +270,6 @@ serviceNowCommentField: work_notes
 useDeltaDeployment: false
 useDeltaDeploymentWithDependencies: false
 useSmartDeploymentTests: false
+allowedPromotionSteps:
+  - source: uat
+    target: preprod
