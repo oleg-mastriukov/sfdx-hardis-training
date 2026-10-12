@@ -20,7 +20,7 @@ depends_on:
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~30 min
+**Time**: ~1 h 40<!-- observed --> (observed: median 1 h 44, 3 learners, fastest 1 h 16)<!-- /observed -->
 
 **You will**: deliver one story that contains a dependency to check, a data deployment action and a
 teammate working on the same permission set, with no step-by-step.
@@ -73,7 +73,8 @@ handle all three.
    data load of the second trap needs it, as in [Lab 2.4](2-4-ship-reference-data-and-a-batch-with-deployment-actions.md)
 6. **Retrieve it**: **Commit changes**, **Recent Changes**, and take what you made and nothing
    else. Commit it
-7. **Publish, Pull Request, green, merge**
+7. **Publish, Pull Request, green, merge**, in the order the three things below ask for: the
+   teammate comes before your Pull Request, the data action after it
 
 ### The three things waiting for you
 
@@ -155,7 +156,7 @@ you skipped Level 1, that is where it will say so, and the command says it befor
 !!! tip "If the course helped you"
     [oxsecurity/megalinter](https://github.com/oxsecurity/megalinter) is the linting engine behind
     the quality gate your Pull Requests went through. A star is how an open source project stays
-    visible: open its page and click **Star** **(1)**, at the top right. Give it a star if you liked this
+    visible: open its page and click **Star** **(1)**, on the right of the repository name. Give it a star if you liked this
     course!
 
     ![The Star button of the MegaLinter repository on GitHub](../../_assets/annotated/web/github-star-megalinter.png)
